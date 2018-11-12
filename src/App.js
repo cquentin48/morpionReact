@@ -29,39 +29,45 @@ class App extends Component {
    */
   handleClickEvent = (x,y)=>{
     let currentGameStatus = this.state.gamestatus;
-    if(currentGameStatus === -1){
-      let newGameBoard = this.cloneGameBoard(this.state.gameBoard);
-      let updatedCurrentPlayer = this.state.currentPlayer;
-
-      if(this.state.currentPlayer === 0){
-        newGameBoard[x][y] = 'X';
-      }else if(this.state.currentPlayer === 1){
-        newGameBoard[x][y] = 'O';
-      }else{
-        newGameBoard[x][y] = '';
-      }
-      
-      if(updatedCurrentPlayer === 0){
-        updatedCurrentPlayer = 1;
-      }else{
-        updatedCurrentPlayer = 0;
-      }
-  
-      this.setState({
-        gameBoard:newGameBoard,
-        currentPlayer:updatedCurrentPlayer
-      })
-      console.log(this.state.gameBoard);
-
-      let currentGameStatus = this.checkForWinner();
-
-      this.setState({
-        gamestatus:currentGameStatus
-      })
+    if(this.state.gameBoard[x][y]!=''){
+      alert("Veuillez remplir une case vide!");
     }else{
-      alert("Vous ne pouvez pas jouer : la partie est finie!");
+      if(currentGameStatus === -1){
+        let newGameBoard = this.cloneGameBoard(this.state.gameBoard);
+        let updatedCurrentPlayer = this.state.currentPlayer;
+
+
+        if(this.state.currentPlayer === 0){
+          newGameBoard[x][y] = 'X';
+        }else if(this.state.currentPlayer === 1){
+          newGameBoard[x][y] = 'O';
+        }else{
+          newGameBoard[x][y] = '';
+        }
+        
+        if(updatedCurrentPlayer === 0){
+          updatedCurrentPlayer = 1;
+        }else{
+          updatedCurrentPlayer = 0;
+        }
+    
+        this.setState({
+          gameBoard:newGameBoard,
+          currentPlayer:updatedCurrentPlayer
+        }, () => {
+          let currentGameStatus = this.checkForWinner();
+    
+          this.setState({
+            gamestatus:currentGameStatus
+          })
+        })
+
+      }else{
+        alert("Vous ne pouvez pas jouer : la partie est finie!");
+      }
     }
   }
+  
 
   /**
    * Fonction de clonage d'un tableau
@@ -83,10 +89,11 @@ class App extends Component {
    */
   checkForWinner(){
     const newGameTableBoard = this.cloneGameBoard(this.state.gameBoard);
+    console.log(newGameTableBoard);
 
     for(let i = 0;i<3;i++){
       let gameLine = newGameTableBoard[i];
-      if(gameLine[0].innerHTML === gameLine[1].innerHTML === gameLine[2].innerHTML && gameLine[0].innerHTML!== ''){
+      if(gameLine[i][0] === gameLine[i][1] === gameLine[i][2] && gameLine[i][0] != ''){
         console.log("Victoire par la ligne "+i);
         return 0;
       }
@@ -176,13 +183,15 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <h1>Jeu du morpion</h1>
+          <p>Jeu du morpion créé avec React Javascript Natif</p>
           <GameTableBoard board={this.state.gameBoard} onClick={this.handleClickEvent}/>
           <GameBoardStatus finished = {this.state.isFinished}
                            winner={this.state.winner}
                            loser={this.state.loser}
                            currentplayer={this.state.currentPlayer}
                            />
-          <ManagmentButtons razScoresOnClick={this.razScores} razBoardOnClick={this.razBoardButtonHandler}/>                 
+
         </header>
       </div>
     );
@@ -190,3 +199,4 @@ class App extends Component {
 }
 
 export default App;
+//          <ManagmentButtons razScoresOnClick={this.razScores} razBoardOnClick={this.razBoardButtonHandler}/>                 

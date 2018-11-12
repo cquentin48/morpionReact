@@ -77,17 +77,17 @@ header{
   width: 100%;
 }
 
-#operationManagment{
+div#operationsManagment{
   margin: 0; /* pour éviter les marges */
-margin-left: auto;
+  margin-left: auto;
   margin-right: auto;
-display: block;
+  display: block;
   position: absolute;
   top: 50px;
   left: 0px;
   height:100%;
   width:12.5%;
-  background-color:rgb(6,66,96);
+  text-align:center
 }
 
 nav>div>table{
