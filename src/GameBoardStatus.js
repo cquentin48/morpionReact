@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 class GameBoardStatus extends Component {
-  constructor(){
-    super();
-  }
   render() {
     if(this.props.finished===true){
       return(

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import GameTableBoard from './GameTableBoard';
-import GameBoardStatus from './GameBoardStatus'
+import GameBoardStatus from './GameBoardStatus';
+import ManagmentButtons from './ManagmentButtons';
 
 class App extends Component {
+  /**
+   * Constructeur de classe
+   */
   constructor(){
     super();
     this.state = {
@@ -20,10 +24,13 @@ class App extends Component {
     }
   }
 
+  /**
+   * Fonction de gestion du clic de la souris avec la cellule d'un tableau
+   */
   handleClickEvent = (x,y)=>{
     let currentGameStatus = this.state.gamestatus;
     if(currentGameStatus === -1){
-      let newGameBoard = this.updateBoard(this.state.gameBoard);
+      let newGameBoard = this.cloneGameBoard(this.state.gameBoard);
       let updatedCurrentPlayer = this.state.currentPlayer;
 
       if(this.state.currentPlayer === 0){
@@ -44,6 +51,7 @@ class App extends Component {
         gameBoard:newGameBoard,
         currentPlayer:updatedCurrentPlayer
       })
+      console.log(this.state.gameBoard);
 
       let currentGameStatus = this.checkForWinner();
 
@@ -55,10 +63,14 @@ class App extends Component {
     }
   }
 
-  updateBoard(refTable) {
-    let newTable = new Array();
+  /**
+   * Fonction de clonage d'un tableau
+   * @param {le tableau à recopier} refTable 
+   */
+  cloneGameBoard(refTable) {
+    let newTable = [];
     for(let i =0;i<3;i++){
-      newTable[i] = new Array();
+      newTable[i] = [];
       for(let j=0;j<3;j++){
         newTable[i][j] = refTable[i][j];
       }
@@ -66,11 +78,12 @@ class App extends Component {
     return newTable;
   }
   
+  /**
+   * Fonction de recherche du gagnant
+   */
   checkForWinner(){
-    const newGameTableBoard = this.updateBoard(this.state.gameBoard);
-    for(let i = 0;i<3;i++){
-      let gameLine = newGameTableBoard[i];
-    }
+    const newGameTableBoard = this.cloneGameBoard(this.state.gameBoard);
+
     for(let i = 0;i<3;i++){
       let gameLine = newGameTableBoard[i];
       if(gameLine[0].innerHTML === gameLine[1].innerHTML === gameLine[2].innerHTML && gameLine[0].innerHTML!== ''){
@@ -98,6 +111,25 @@ class App extends Component {
     }
   }
 
+  /**
+   * Vérifie si le tableau est remplit
+   * @returns {true} le tableau est remplit, {false} sinon
+   */
+  isGameTableFilled(){
+    for(let i = 0;i<3;i++){
+      for(let j = 0 ;j<3;j++){
+        if(this.state.gameBoard[i][j] == ''){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Vérifie le statut du jeu
+   * @param {le statut du jeu} gameStatus 
+   */
   updateStatus(gameStatus){
     let winnerPlayer;
     let looserPlayer;
@@ -118,6 +150,28 @@ class App extends Component {
     })
   }
 
+  /**
+   * Fonction de gestion du boutton de remise à zéro
+   * @wip
+   */
+  razBoardButtonHandler(){
+    let newGameBoard=[
+      ["","",""],
+      ["","",""],
+      ["","",""]
+    ]
+    this.setState({
+      gameBoard:newGameBoard
+    })
+  }
+
+  razScores(){
+    
+  }
+
+  /**
+   * Affichage de la classe
+   */
   render() {
     return (
       <div className="App">
@@ -128,6 +182,7 @@ class App extends Component {
                            loser={this.state.loser}
                            currentplayer={this.state.currentPlayer}
                            />
+          <ManagmentButtons razScoresOnClick={this.razScores} razBoardOnClick={this.razBoardButtonHandler}/>                 
         </header>
       </div>
     );
